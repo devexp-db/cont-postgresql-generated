@@ -1,0 +1,26 @@
+#! /bin/sh
+
+tasks='
+centos-7-x86_64 centos/7/x86_64
+fedora-22-x86_64 fedora/22/x86_64
+fedora-23-x86_64 fedora/23/x86_64
+'
+
+regenerate ()
+(
+    dist="$1"
+    destdir="$2"
+    cd "cont-postgresql"
+    git submodule init
+    git submodule update
+    make clean DESTDIR="$destdir"
+    make distro="$dist" DESTDIR="$destdir"
+)
+
+echo "$tasks" | while read dist dir; do
+  test -z "$dist" && continue
+
+  destdir=`pwd`"/$dir"
+  echo "$destdir"
+  regenerate "$dist" "$destdir" || exit 1
+done
