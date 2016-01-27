@@ -1,11 +1,5 @@
 #! /bin/sh
 
-tasks='
-centos-7-x86_64 centos/7/x86_64
-fedora-22-x86_64 fedora/22/x86_64
-fedora-23-x86_64 fedora/23/x86_64
-'
-
 regenerate ()
 (
     dist="$1"
@@ -17,7 +11,7 @@ regenerate ()
     make distro="$dist" DESTDIR="$destdir"
 )
 
-echo "$tasks" | while read dist dir; do
+cat tasks | while read dist dir; do
   test -z "$dist" && continue
 
   destdir=`pwd`"/$dir"

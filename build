@@ -1,0 +1,40 @@
+#! /bin/sh
+
+die ()
+{
+    echo "$*"
+    exit 1
+}
+
+build ()
+(
+    destdir="$1"
+    dist="$2"
+    version="$version"
+    old_version=
+
+    cd "$destdir"
+
+    while test "$old_version" != "$version"
+    do
+        suffix=$(echo "$2" | sed -e 's/-[^-]*$//' -e 's/-//')
+        tag="praiskup/postgresql:APIv$version-$suffix"
+        echo "$tag"
+
+        if test -z "$dry_run"; then
+            docker build -t "$tag" .
+        fi
+
+        old_version=$version
+        version=`echo $version | sed 's/\\.[0-9]$//g'`
+    done
+)
+
+test $# -eq 0 && die "one parameter expected -- version"
+version="$1"
+
+cat tasks | while read dist dir; do
+  test -z "$dist" && continue
+  destdir=`pwd`"/$dir"
+  build "$destdir" "$dist" || exit 1
+done
