@@ -1,0 +1,9 @@
+Images built from this repository are available on:
+
+    https://hub.docker.com/r/praiskup/postgresql/
+
+Please do not send patches against this repository.  Pull-requests are expected
+in project:
+
+    https://github.com/devexp-db/cont-postgresql
+
